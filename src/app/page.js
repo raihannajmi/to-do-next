@@ -1,69 +1,72 @@
-import Image from "next/image";
+import Link from "next/link";
+import Counter from "@/components/Counter";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="mx-auto max-w-3xl space-y-8 py-10 px-4">
+      {/* Bagian Header / Intro */}
+      <section className="space-y-3">
+        <span className="rounded-md bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
+          Server Component (Default)
+        </span>
+        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Selamat Datang di Next.js! 👋
+        </h1>
+        <p className="text-base text-gray-600 leading-relaxed">
+          Halaman ini (<code className="rounded bg-gray-200 px-1.5 py-0.5 text-sm font-mono text-gray-800">src/app/page.js</code>) 
+          dirender langsung di server sebelum dikirimkan ke browsermu dalam bentuk HTML utuh.
+        </p>
+      </section>
+
+      {/* Bagian Demonstrasi Client Component */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-gray-800">
+          1. Demonstrasi Client Component
+        </h2>
+        <p className="text-sm text-gray-600">
+          Komponen di bawah ini menggunakan directive{" "}
+          <code className="font-mono text-xs bg-gray-200 px-1 py-0.5 rounded">"use client"</code>{" "}
+          dan hook <code className="font-mono text-xs bg-gray-200 px-1 py-0.5 rounded">useState</code> untuk membuat interaksi tombol:
+        </p>
+        <Counter />
+      </section>
+
+      {/* Bagian Navigasi & Dynamic Route */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-gray-800">
+          2. Uji Coba Navigasi Antar Halaman
+        </h2>
+        <p className="text-sm text-gray-600">
+          Next.js menggunakan komponen <code className="font-mono text-xs bg-gray-200 px-1 py-0.5 rounded">&lt;Link&gt;</code>{" "}
+          agar perpindahan rute berlangsung instan tanpa reload halaman:
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link
+            href="/about"
+            className="group block rounded-xl border border-gray-200 bg-white p-5 shadow-xs transition hover:border-blue-500 hover:shadow-md"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
+              Halaman Tentang Kami →
+            </h3>
+            <p className="mt-1 text-xs text-gray-500">
+              Static Route: <code className="font-mono">src/app/about/page.js</code>
+            </p>
+          </Link>
+
+          <Link
+            href="/todos/belajar-next"
+            className="group block rounded-xl border border-gray-200 bg-white p-5 shadow-xs transition hover:border-purple-500 hover:shadow-md"
           >
-            Documentation
-          </a>
+            <h3 className="font-semibold text-gray-900 group-hover:text-purple-600">
+              Detail Todo (Dinamis) →
+            </h3>
+            <p className="mt-1 text-xs text-gray-500">
+              Dynamic Route: <code className="font-mono">src/app/todos/[id]/page.js</code>
+            </p>
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
