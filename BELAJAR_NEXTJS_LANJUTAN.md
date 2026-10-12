@@ -10,6 +10,7 @@
 4. [Langkah 3: Menyajikan ke Halaman Utama (src/app/page.js)](#4-langkah-3-menyajikan-ke-halaman-utama-srcapppagejs)
 5. [Langkah 4: Menata Gaya & Pengaman Dark Mode (src/app/globals.css)](#5-langkah-4-menata-gaya--pengaman-dark-mode-srcappglobalscss)
 6. [Latihan Praktik: Uji Coba Semua Fitur di Browser](#6-latihan-praktik-uji-coba-semua-fitur-di-browser)
+7. [Bedah Rahasia: Perbedaan useState vs LocalStorage (Dan Cara Melihatnya di Browser)](#7-bedah-rahasia-perbedaan-usestate-vs-localstorage-dan-cara-melihatnya-di-browser)
 
 ---
 
@@ -862,3 +863,98 @@ Buka browsermu di `http://localhost:3000` dan coba 4 petualangan ini:
 3. **Uji Coba UPDATE:** Tekan tombol *Edit Tugas* dari dalam modal detail (atau tombol *Edit* di samping kartu). Ubah judulnya, lalu tekan *Simpan Perubahan*.
 4. **Uji Coba ESCAPE:** Buka modal apa saja, lalu tekan tombol `Esc` di ujung kiri atas keyboard laptopmu. Popup akan langsung menutup seketika!
 5. **Uji Coba CELENGAN:** Tekan tombol refresh browser (F5 atau `Cmd + R`). Semua tugas yang kamu buat tetap tersimpan utuh di layarmu!
+
+---
+
+## 7. Bedah Rahasia: Perbedaan useState vs LocalStorage (Dan Cara Melihatnya di Browser)
+
+Banyak programmer pemula sering bingung: *"Kenapa kita butuh useState DAN LocalStorage sekaligus? Kenapa tidak pakai salah satu saja?"*
+
+Mari kita bedah dengan analogi yang super gampang dipahami anak kelas 3 SD!
+
+---
+
+### Analogi Sederhana: Ingatan Otak vs Buku Harian
+
+Bayangkan kamu sedang berada di dalam kelas sekolah:
+
+1. **`useState` adalah Ingatan Jangka Pendek di Kepalamu (Memori RAM):**
+   * Ketika guru bertanya: *"Berapa 5 + 3?"*, otakmu langsung menjawab *"8!"* seketika itu juga. Cepat sekali!
+   * Di komputer, setiap kali nilai di dalam `useState` berubah, **layar komputermu langsung berkedip dan menggambar ulang tampilannya seketika**. Itulah yang disebut **Reaktif**.
+   * **Kelemahannya:** Begitu kamu pulang ke rumah dan tidur malam (ibarat web di-refresh atau tab browser ditutup), ingatan hitungan tadi langsung lupa dan terhapus!
+
+2. **`LocalStorage` adalah Buku Harian di Dalam Tas Sekolahmu (Memori Disk):**
+   * Buku harian itu terbuat dari kertas fisik. Mau kamu tidur semalaman, mau kamu pergi liburan sebulan, tulisan di buku harian itu **tidak akan pernah hilang**.
+   * Di browser, `localStorage` menyimpan data di dalam memori penyimpanan laptopmu secara permanen.
+   * **Kelemahannya:** Buku harian itu diam dan pasif. Kalau ada yang diam-diam menulis di buku harianmu, matamu tidak otomatis tahu sampai kamu sengaja membuka dan membaca bukunya. `localStorage` **tidak bisa membuat layar berkedip atau berubah sendiri**.
+
+---
+
+### Tabel Perbandingan Super Jelas
+
+| Hal yang Dibandingkan | `useState` (Ingatan Otak) | `localStorage` (Buku Harian di Tas) |
+| :--- | :--- | :--- |
+| **Di mana disimpannya?** | Di memori sementara React (RAM). | Di ruang penyimpanan browser laptopmu (Hard Disk). |
+| **Kalau halaman di-refresh?** | **LUPA!** Data hilang kembali ke nilai awal. | **SELAMAT!** Data tetap tersimpan aman. |
+| **Apakah layar langsung berubah?** | **YA!** Layar langsung di-render ulang seketika (*Reaktif*). | **TIDAK.** Hanya menyimpan teks, layar tidak otomatis berubah. |
+| **Bisa simpan tipe data apa?** | Apa saja (Array, Object, Angka, Boolean, Fungsi). | **Hanya Teks String**. Wajib diubah pakai `JSON.stringify()`. |
+| **Kapan kita menggunakannya?** | Saat butuh interaksi cepat (input teks, buka popup, klik tombol). | Saat ingin data tidak hilang ketika pengguna keluar dari web. |
+
+---
+
+### Kenapa Mereka Berdua Harus Menjadi Sahabat Baik?
+
+Di aplikasi to-do list kita, mereka bekerja sama seperti dua sahabat:
+
+```text
+[1] Pengguna mengetik & klik "Buat Tugas"
+                 ↓
+[2] useState langsung memajang tugas baru di layar seketika (User senang karena cepat!)
+                 ↓
+[3] useEffect bertugas mencatat salinan tugas itu ke LocalStorage (Disimpan ke buku harian)
+                 ↓
+[4] Pengguna me-refresh halaman (useState sempat lupa)
+                 ↓
+[5] useEffect membaca buku harian LocalStorage dan memberikannya kembali ke useState
+                 ↓
+[6] Tugas lama kembali muncul di layar seperti sedia kala!
+```
+
+---
+
+### Cara Membuka dan Mengintip LocalStorage di Browsermu Sendiri
+
+Kamu bisa melihat celengan `localStorage` ini secara langsung dengan mata kepalamu sendiri! Caranya sangat seru, seperti menjadi detektif rahasia:
+
+#### Langkah 1: Buka Web Aplikasi
+Buka browsermu (Google Chrome, Microsoft Edge, Brave, atau Safari) dan buka `http://localhost:3000`.
+
+#### Langkah 2: Buka Jendela Detektif (Inspect DevTools)
+* Klik kanan di bagian mana saja pada halaman web (misalnya di area kosong).
+* Pilih menu paling bawah: **Inspect** (atau **Periksa**).
+* *Cara cepat lewat keyboard:* Tekan tombol **`F12`** di Windows, atau tekan **`Cmd + Option + I`** di Mac.
+
+#### Langkah 3: Cari Tab "Application"
+* Di baris menu atas jendela DevTools yang baru muncul, cari tab bernama **Application** (kalau kamu pakai Mozilla Firefox, namanya tab **Storage**).
+* *Tips:* Jika tab "Application" tidak kelihatan karena layar sempit, klik tanda panah dua **`>>`** di pojok kanan atas DevTools, lalu pilih **Application**.
+
+#### Langkah 4: Buka Folder "Local Storage"
+* Lihat menu di bilah sebelah kiri.
+* Cari bagian bersimbol silinder bernama **Storage**.
+* Klik tanda panah kecil di samping tulisan **Local Storage**.
+* Klik alamat web aplikasimu: **`http://localhost:3000`**.
+
+#### Langkah 5: Saksikan Datamu!
+Di tabel sebelah kanan, kamu akan melihat dua kolom:
+1. **Key (Nama Kunci):** `to-do-next-tasks`
+2. **Value (Nilai Data):** Teks panjang berisi daftar tugasmu dalam format JSON, misalnya:
+   ```json
+   [{"id":"task-1","text":"Memahami struktur folder...","completed":true,...}]
+   ```
+
+#### 🧪 Eksperimen Seru yang Wajib Kamu Coba:
+1. Jangan tutup jendela DevTools tersebut.
+2. Coba tambahkan satu tugas baru di webmu: misal *"Beli Es Krim Cokelat"*.
+3. Perhatikan kolom **Value** di DevTools. Teks di dalamnya akan langsung bertambah secara ajaib saat itu juga!
+4. Klik baris `to-do-next-tasks` di DevTools, lalu tekan tombol **Delete** di keyboard laptopmu.
+5. Sekarang refresh webmu (`Cmd + R` atau `F5`). Semua tugas barumu akan terhapus dan kembali ke data bawaan pabrik!
